@@ -1,6 +1,8 @@
 import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class SavedSearchManager(models.Manager):
@@ -60,7 +62,7 @@ class SavedSearch(models.Model):
     user_query = models.CharField(max_length=1000, help_text="The text the user searched on. Useful for display.")
     full_query = models.CharField(max_length=1000, default='', blank=True, help_text="The full query Haystack generated. Useful for searching again.")
     result_count = models.PositiveIntegerField(default=0, blank=True)
-    user = models.ForeignKey(User, blank=True, null=True, related_name='saved_searches')
+    user = models.ForeignKey(User, blank=True, null=True, related_name='saved_searches', on_delete=models.CASCADE)
     created = models.DateTimeField(blank=True, default=datetime.datetime.now)
     
     objects = SavedSearchManager()
